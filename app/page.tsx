@@ -88,7 +88,7 @@ export default function Home() {
 
 
   return (
-    <div className="h-screen w-screen flex flex-col items-center gap-10">
+    <div className="w-screen flex flex-col items-center gap-10">
 
       <Header />
 
