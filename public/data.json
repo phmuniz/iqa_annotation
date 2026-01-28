@@ -1,16 +1,20 @@
 {
-    "images/PAT_8_15_820.png": {
-        "blur": "",
-        "brightness": "",
-        "distance": "",
-        "general_quality": "",
-        "audited": false
-    },
-    "images/PAT_9_17_80.png": {
-        "blur": "",
-        "brightness": "",
-        "distance": "",
-        "general_quality": "",
-        "audited": false
-    } 
+  "PAT_8_15_820.png": {
+    "blur": 4,
+    "brightness": 4,
+    "distance": 5,
+    "framing": 5,
+    "interference": 5,
+    "general_quality": 4,
+    "audited": true
+  },
+  "PAT_9_17_80.png": {
+    "blur": 3,
+    "brightness": 5,
+    "distance": 4,
+    "framing": 3,
+    "interference": 4,
+    "general_quality": 3,
+    "audited": true
+  }
 }
