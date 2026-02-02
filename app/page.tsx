@@ -34,6 +34,8 @@ export default function Home() {
       }
     }));
 
+    console.log(dataJSON);
+
     if (currentImgIndex < imgsList.length - 1) {
 
       setBlurGrade(dataJSON[imgsList[currentImgIndex + 1]].blur || 1);
@@ -102,7 +104,7 @@ export default function Home() {
 
         <div className="flex-1 flex justify-center items-center w-full">
           
-          <form action="" className="w-[80%] flex flex-wrap gap-24 justify-center">
+          <form action="" className="w-[80%] flex flex-col gap-4 justify-center">
 
             <InputGrade label="Blur" value={blurGrade} onChange={(newValue) => setBlurGrade(newValue)}/>
             <InputGrade label="Brightness" value={brightnessGrade} onChange={(newValue) => setBrightnessGrade(newValue)}/>

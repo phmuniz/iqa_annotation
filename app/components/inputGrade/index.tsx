@@ -9,19 +9,37 @@ export default function InputGrade({ label, value, onChange }: InputGradeProps) 
 
 
     return(
-        <div className="flex flex-col justify-center items-center text-2xl">
-            <label className="mb-2">{label}</label>
-            <select
-                value={value}
-                onChange={onChange ? (e) => onChange(Number(e.target.value)) : undefined}
-                className="text-black rounded pl-3 pr-3 py-1 appearance-none w-20 text-center border-2 border-gray-800"
+        <div className="flex justify-center items-center text-2xl">
+            <label className="mr-2">{label}:</label>
+            <div
+                className="flex text-black pl-3 pr-3 py-1 text-center ml-2"
             >
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-            </select>
+                <div className="flex flex-col mr-2">
+
+                    <label>1</label>
+                    <input type="radio" value="1" checked={value === 1} onChange={() => onChange(1)} />
+                </div>
+
+                <div className="flex flex-col mr-2">
+                    <label>2</label>
+                    <input type="radio" value="2" checked={value === 2} onChange={() => onChange(2)} />
+                </div>  
+
+                <div className="flex flex-col mr-2">
+                    <label>3</label>
+                    <input type="radio" value="3" checked={value === 3} onChange={() => onChange(3)} />
+                </div>
+
+                <div className="flex flex-col mr-2">
+                    <label>4</label>
+                    <input type="radio" value="4" checked={value === 4} onChange={() => onChange(4)} />
+                </div>
+
+                <div className="flex flex-col mr-2">
+                    <label>5</label>
+                    <input type="radio" value="5" checked={value === 5} onChange={() => onChange(5)} />
+                </div>
+            </div>
         </div>
     )
 }
