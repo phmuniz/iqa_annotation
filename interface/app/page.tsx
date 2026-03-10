@@ -10,8 +10,16 @@ import InputGrade from "./components/inputGrade";
 export default function Home() {
 
   const [dataJSON, setDataJSON] = useState<Record<string, any>>(data);
-  const [imgsList] = useState<string[]>(() => Object.keys(dataJSON));
-  const [currentImgIndex, setCurrentImgIndex] = useState<number>(0);
+  const imgsList = Object.keys(dataJSON);
+
+  const firstUnauditedIndex = imgsList.findIndex(
+    (key) => !dataJSON[key].audited
+  );
+
+  const [currentImgIndex, setCurrentImgIndex] = useState<number>(
+    firstUnauditedIndex !== -1 ? firstUnauditedIndex : 0
+  );
+  
   const [blurGrade, setBlurGrade] = useState<number>(dataJSON[imgsList[currentImgIndex]].blur || 1);
   const [brightnessGrade, setBrightnessGrade] = useState<number>(dataJSON[imgsList[currentImgIndex]].brightness || 1);
   const [distanceGrade, setDistanceGrade] = useState<number>(dataJSON[imgsList[currentImgIndex]].distance || 1);

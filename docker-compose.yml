@@ -1,0 +1,9 @@
+services:
+  interface:
+    build: "./interface"
+    container_name: interface_iqa_annotation
+    ports:
+      - 3000:3000
+    volumes:
+      - ${IMAGES_PATH}:/app/public/images
+      - ${JSON_PATH}:/app/public/data.json

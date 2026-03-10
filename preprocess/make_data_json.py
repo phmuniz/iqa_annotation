@@ -1,11 +1,12 @@
 import json
 import os
 from glob import glob
+from dotenv import load_dotenv
 
-path_to_public = "../public"
+load_dotenv(os.path.join("..", ".env"))
 
-imgs_path = glob(os.path.join(path_to_public, "images", "*png"))
-data_json_path = os.path.join(path_to_public, "data.json")
+imgs_path = glob(os.path.join(os.getenv("IMAGES_PATH"), "*png"))
+data_json_path = os.getenv("JSON_PATH")
 
 data = {}
 
