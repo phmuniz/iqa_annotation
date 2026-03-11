@@ -1,31 +1,26 @@
 "use client"
 
-import data from "../public/data.json"
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Header from "./components/header";
 import { arrowRight, arrowLeft } from "./icons";
 import InputGrade from "./components/inputGrade";
+import Footer from "./components/footer";
 
 export default function Home() {
 
-  const [dataJSON, setDataJSON] = useState<Record<string, any>>(data);
-  const imgsList = Object.keys(dataJSON);
+  const [dataJSON, setDataJSON] = useState<Record<string, any>>({});
+  const [imgsList, setImgsList] = useState<string[]>([]);
 
-  const firstUnauditedIndex = imgsList.findIndex(
-    (key) => !dataJSON[key].audited
-  );
-
-  const [currentImgIndex, setCurrentImgIndex] = useState<number>(
-    firstUnauditedIndex !== -1 ? firstUnauditedIndex : 0
-  );
+  const [currentImgIndex, setCurrentImgIndex] = useState<number>(0);
   
-  const [blurGrade, setBlurGrade] = useState<number>(dataJSON[imgsList[currentImgIndex]].blur || 1);
-  const [brightnessGrade, setBrightnessGrade] = useState<number>(dataJSON[imgsList[currentImgIndex]].brightness || 1);
-  const [distanceGrade, setDistanceGrade] = useState<number>(dataJSON[imgsList[currentImgIndex]].distance || 1);
-  const [framingGrade, setFramingGrade] = useState<number>(dataJSON[imgsList[currentImgIndex]].framing || 1);
-  const [interferenceGrade, setInterferenceGrade] = useState<number>(dataJSON[imgsList[currentImgIndex]].interference || 1);
-  const [generalGrade, setGeneralGrade] = useState<number>(dataJSON[imgsList[currentImgIndex]].general_quality || 1);
+  const [blurGrade, setBlurGrade] = useState<number>(1);
+  const [brightnessGrade, setBrightnessGrade] = useState<number>(1);
+  const [distanceGrade, setDistanceGrade] = useState<number>(1);
+  const [framingGrade, setFramingGrade] = useState<number>(1);
+  const [interferenceGrade, setInterferenceGrade] = useState<number>(1);
+  const [generalGrade, setGeneralGrade] = useState<number>(1);
+  const [discarded, setDiscarded] = useState<boolean>(false);
 
   function nextImage() {
 
@@ -38,6 +33,7 @@ export default function Home() {
         framing: framingGrade,
         interference: interferenceGrade,
         general_quality: generalGrade,
+        discarded: discarded,
         audited: true
       }
     }));
@@ -52,6 +48,7 @@ export default function Home() {
       setFramingGrade(dataJSON[imgsList[currentImgIndex + 1]].framing || 1);
       setInterferenceGrade(dataJSON[imgsList[currentImgIndex + 1]].interference || 1);
       setGeneralGrade(dataJSON[imgsList[currentImgIndex + 1]].general_quality || 1);
+      setDiscarded(dataJSON[imgsList[currentImgIndex + 1]].discarded || false);
 
       setCurrentImgIndex(currentImgIndex + 1);
     }
@@ -70,6 +67,8 @@ export default function Home() {
       setFramingGrade(dataJSON[imgsList[currentImgIndex - 1]].framing || 1);
       setInterferenceGrade(dataJSON[imgsList[currentImgIndex - 1]].interference || 1);
       setGeneralGrade(dataJSON[imgsList[currentImgIndex - 1]].general_quality || 1);
+      setDiscarded(dataJSON[imgsList[currentImgIndex - 1]].discarded || false);
+      setDiscarded(dataJSON[imgsList[currentImgIndex - 1]].discarded || false);
 
       setCurrentImgIndex(currentImgIndex - 1);
     }
@@ -96,13 +95,44 @@ export default function Home() {
     }
   }
 
+  useEffect(() => {
+    fetch("/data.json")
+      .then(res => res.json())
+      .then(data => {
+  
+        setDataJSON(data);
+  
+        const imgs = Object.keys(data);
+        setImgsList(imgs);
+  
+        const firstUnauditedIndex = imgs.findIndex(
+          key => !data[key].audited
+        );
+  
+        const index = firstUnauditedIndex !== -1 ? firstUnauditedIndex : 0;
+  
+        setCurrentImgIndex(index);
+  
+        const imgData = data[imgs[index]] ?? {};
+  
+        setBlurGrade(imgData.blur ?? 1);
+        setBrightnessGrade(imgData.brightness ?? 1);
+        setDistanceGrade(imgData.distance ?? 1);
+        setFramingGrade(imgData.framing ?? 1);
+        setInterferenceGrade(imgData.interference ?? 1);
+        setGeneralGrade(imgData.general_quality ?? 1);
+        setDiscarded(imgData.discarded ?? false);
+  
+      });
+  }, []);
+
 
   return (
-    <div className="w-screen flex flex-col items-center gap-10">
+    <div className="w-full flex flex-col items-center gap-10">
 
       <Header />
 
-      <div className="flex w-full mt-9">
+      <div className="flex-col gap-8 lg:flex-row lg:gap-0 flex w-full mt-9">
 
         <div className="flex-1 flex flex-col justify-center items-center">
           <span className="text-2xl font-bold mb-2">{currentImgIndex + 1} / {imgsList.length}</span>
@@ -110,7 +140,10 @@ export default function Home() {
           <span className="text-xl mt-2">{imgsList[currentImgIndex]}</span>
         </div>
 
-        <div className="flex-1 flex justify-center items-center w-full">
+        <div className="flex-1 flex flex-col items-center w-full">
+
+          <h1 className="text-4xl font-bold">Avaliação</h1>
+          <p className="mt-3 mb-8 w-[70%]">Avaliação das imagens de acordo com os critérios definidos no handbook de instruções para anotação de imagens de lesões de pele.</p>
           
           <form action="" className="w-[80%] flex flex-col gap-4 justify-center">
 
@@ -121,6 +154,25 @@ export default function Home() {
             <InputGrade label="Interference" value={interferenceGrade} onChange={(newValue) => setInterferenceGrade(newValue)}/>
             <InputGrade label="General Perception" value={generalGrade} onChange={(newValue) => setGeneralGrade(newValue)}/>
           </form>
+
+
+          <div className="flex justify-center items-center text-2xl mt-4">
+            <label className="mr-2">Você descartaria essa imagem? </label>
+            <div
+                className="flex text-black pl-3 pr-3 py-1 text-center ml-2"
+            >
+                <div className="flex flex-col mr-2">
+
+                    <label>Sim</label>
+                    <input type="radio" value="Sim" checked={discarded === true} onChange={() => setDiscarded(true)} />
+                </div>
+
+                <div className="flex flex-col mr-2">
+                    <label>Não</label>
+                    <input type="radio" value="Não" checked={discarded === false} onChange={() => setDiscarded(false)} />
+                </div>  
+            </div>
+          </div>
         </div>
         
       </div>
@@ -132,6 +184,8 @@ export default function Home() {
         <button className="hover:scale-105 cursor-pointer" onClick={nextImage}>{arrowRight}</button>
 
       </div>
+
+      <Footer />
       
     </div>
   );

@@ -20,6 +20,7 @@ for img in imgs_path:
         "framing": 1,
         "interference": 1,
         "general_quality": 1,
+        "discarded": False,
         "audited": False
     }
 
