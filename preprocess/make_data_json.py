@@ -3,7 +3,7 @@ import os
 from glob import glob
 from dotenv import load_dotenv
 
-load_dotenv(os.path.join("..", ".env"))
+load_dotenv(os.path.join(".env"))
 
 imgs_path = glob(os.path.join(os.getenv("IMAGES_PATH"), "*png"))
 data_json_path = os.getenv("JSON_PATH")

@@ -29,7 +29,7 @@ Se você ainda não gerou o json, coloque o caminho completo de onde você desej
 Além das imagens, é necessário ter um arquivo json específico que controla a anotação das imagens em questão. Portanto, antes de qualquer coisa é necessário gerar este arquivo. <br>
 Para isso, basta executar o seguinte comando no terminal:
 ```bash
-python preprocesss/make_data_json.py
+python preprocess/make_data_json.py
 ```
 ## 💻 Como executar?
 Com o json gerado e os caminhos definidos, basta executar:
